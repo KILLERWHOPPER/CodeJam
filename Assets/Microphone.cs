@@ -10,12 +10,14 @@ using Whisper.Utils;
 public class Microphone : MonoBehaviour
 {
     public InputActionReference gripInputActionReference;
+    public OpenAI openAI;
+
     public WhisperManager whisper;
     public MicrophoneRecord microphoneRecord;
 
     public Button button;
     public TextMeshProUGUI buttonText;
-    public TextMeshProUGUI outputText;
+    string outputText;
 
     private void Awake()
     {
@@ -65,12 +67,13 @@ public class Microphone : MonoBehaviour
         buttonText.text = "Record";
 
         var res = await whisper.GetTextAsync(recordedAudio.Data, recordedAudio.Frequency, recordedAudio.Channels);
-        if (res == null || !outputText)
+        if (res == null || outputText == "")
             return;
 
         var text = res.Result;
 
-        outputText.text = text;
+        outputText = text;
+        openAI.GenerateResponse(outputText);
     }
 
 }

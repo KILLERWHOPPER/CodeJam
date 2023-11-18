@@ -15,8 +15,8 @@ public class OpenAI : MonoBehaviour
 
     class ResponseData
     {
-        public string text;
         public string animation;
+        public byte[] audio;
     }
 
     public class ErrorResponse
@@ -77,7 +77,6 @@ public class OpenAI : MonoBehaviour
                 string response = request.downloadHandler.text;
                 ResponseData responseData = JsonUtility.FromJson<ResponseData>(response);
 
-                text = responseData.text;
                 animationEvent = responseData.animation;
                 validResponse = true;
             }

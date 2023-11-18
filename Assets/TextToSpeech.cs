@@ -23,7 +23,7 @@ public class TextToSpeech : MonoBehaviour
 
     private async void playSound(string text)
     {
-        var credentials = new BasicAWSCredentials("AKIARB72NLONHAD6T3MD", "VZ/sFtoDdetAko/29qqbTlwYGg/AC7YtvpIIsfjM");
+        var credentials = new BasicAWSCredentials("", "");
         var client = new AmazonPollyClient(credentials, RegionEndpoint.USEast1);
 
         var request = new SynthesizeSpeechRequest()
