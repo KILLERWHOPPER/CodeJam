@@ -13,20 +13,36 @@ public class OpenAI : MonoBehaviour
         public string dialogue;
     }
 
+    class ResponseData
+    {
+        public string text;
+        public string animation;
+    }
+
     public class ErrorResponse
     {
         public string error;
     }
 
-    string Base = "http://10.75.0.150:5000";
-    string animation = "";
-    string dialogue = "";
+    string Base = "";
 
-    IEnumerator SoundAsync()
+    public static bool validResponse = false;
+    public static string animationEvent = "";
+    public static string text = "";
+
+    public void GenerateResponse(string prompt)
+    {
+        if (!string.IsNullOrEmpty(prompt))
+        {
+            StartCoroutine(SoundAsync(prompt));
+        }
+    }
+
+    IEnumerator SoundAsync(string prompt)
     {
         string url = Base + "/";
         RequestMicrophoneData data = new RequestMicrophoneData();
-        data.dialogue = dialogue;
+        data.dialogue = prompt;
 
         string jsonData = JsonUtility.ToJson(data);
         byte[] byteData = System.Text.Encoding.UTF8.GetBytes(jsonData);
@@ -53,30 +69,19 @@ public class OpenAI : MonoBehaviour
                 {
                     Debug.Log("Error: " + request.error);
                 }
+                validResponse = false;
             }
             else
             {
-                Debug.Log("response received for " + dialogue + ", loading image");
+                Debug.Log("response received for " + prompt);
                 string response = request.downloadHandler.text;
-                byte[] imageData = Convert.FromBase64String(response);
+                ResponseData responseData = JsonUtility.FromJson<ResponseData>(response);
 
-                //do stuff with data
+                text = responseData.text;
+                animationEvent = responseData.animation;
+                validResponse = true;
             }
         }
     }
 
-    
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

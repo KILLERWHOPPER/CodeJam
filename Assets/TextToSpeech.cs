@@ -12,15 +12,23 @@ using System.Threading.Tasks;
 public class TextToSpeech : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
-    // Start is called before the first frame update
-    private async void Start()
+
+    private void Update()
     {
-        var credentials = new BasicAWSCredentials("", "");
+        if(OpenAI.validResponse)
+        {
+            playSound(OpenAI.text);
+        }
+    }
+
+    private async void playSound(string text)
+    {
+        var credentials = new BasicAWSCredentials("AKIARB72NLONHAD6T3MD", "VZ/sFtoDdetAko/29qqbTlwYGg/AC7YtvpIIsfjM");
         var client = new AmazonPollyClient(credentials, RegionEndpoint.USEast1);
 
         var request = new SynthesizeSpeechRequest()
         {
-            Text = "Welcome to Code Jam 13!",
+            Text = text,
             Engine = Engine.Neural,
             VoiceId = VoiceId.Arthur,
             OutputFormat = OutputFormat.Mp3
@@ -40,7 +48,7 @@ public class TextToSpeech : MonoBehaviour
         using (var www = UnityWebRequestMultimedia.GetAudioClip($"{Application.persistentDataPath}/audio.mp3", AudioType.MPEG))
         {
             var op = www.SendWebRequest();
-            while(!op.isDone)
+            while (!op.isDone)
             {
                 await Task.Yield();
             }
@@ -63,5 +71,10 @@ public class TextToSpeech : MonoBehaviour
                 fileStream.Write(buffer, 0, bytesRead);
             }
         }
+    }
+
+    public void timeTalking()
+    {
+
     }
 }
