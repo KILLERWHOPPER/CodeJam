@@ -13,6 +13,12 @@ public class OpenAI : MonoBehaviour
         public string dialogue;
     }
 
+    class RequestChar
+    {
+        public string char_name;
+        public string series;
+    }
+
     class ResponseData
     {
         public string text_message;
@@ -26,7 +32,7 @@ public class OpenAI : MonoBehaviour
         public string error;
     }
 
-    string url = "";
+    string Base = "http://192.168.59.105:8000";
 
     public static bool validResponse = false;
     public static string animationEvent = "";
@@ -34,16 +40,37 @@ public class OpenAI : MonoBehaviour
     public static string text = "";
     public static string faceExpression = "";
 
+    private void Start()
+    {
+        string url = Base + "/initialize/";
+
+        RequestChar data = new RequestChar();
+        data.char_name = "Trump";
+        data.series = "America";
+
+        string jsonData = JsonUtility.ToJson(data);
+        byte[] byteData = System.Text.Encoding.UTF8.GetBytes(jsonData);
+
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        request.uploadHandler = new UploadHandlerRaw(byteData);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        StartCoroutine(receive(request));
+
+    }
+
     public void GenerateResponse(string prompt)
     {
         if (!string.IsNullOrEmpty(prompt))
         {
-            StartCoroutine(SoundAsync(prompt));
+            SoundAsync(prompt);
         }
     }
 
-    IEnumerator SoundAsync(string prompt)
+    void SoundAsync(string prompt)
     {
+        string url = Base + "/receive_input/";
         RequestMicrophoneData data = new RequestMicrophoneData();
         data.dialogue = prompt;
 
@@ -56,6 +83,12 @@ public class OpenAI : MonoBehaviour
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
 
+        StartCoroutine(receive(request));
+
+    }
+
+    IEnumerator receive(UnityWebRequest request)
+    {
         using (request)
         {
             yield return request.SendWebRequest();
@@ -76,7 +109,6 @@ public class OpenAI : MonoBehaviour
             }
             else
             {
-                Debug.Log("response received for " + prompt);
                 string response = request.downloadHandler.text;
                 ResponseData responseData = JsonUtility.FromJson<ResponseData>(response);
 
