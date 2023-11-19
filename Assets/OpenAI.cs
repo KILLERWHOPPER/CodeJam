@@ -15,8 +15,10 @@ public class OpenAI : MonoBehaviour
 
     class ResponseData
     {
-        public string animation;
-        public byte[] audio;
+        public string text_message;
+        public string face_expression;
+        public string body_movement;
+        public string voice_link;
     }
 
     public class ErrorResponse
@@ -24,11 +26,13 @@ public class OpenAI : MonoBehaviour
         public string error;
     }
 
-    string Base = "";
+    string url = "";
 
     public static bool validResponse = false;
     public static string animationEvent = "";
+    public static string audioLink = "";
     public static string text = "";
+    public static string faceExpression = "";
 
     public void GenerateResponse(string prompt)
     {
@@ -40,7 +44,6 @@ public class OpenAI : MonoBehaviour
 
     IEnumerator SoundAsync(string prompt)
     {
-        string url = Base + "/";
         RequestMicrophoneData data = new RequestMicrophoneData();
         data.dialogue = prompt;
 
@@ -77,10 +80,15 @@ public class OpenAI : MonoBehaviour
                 string response = request.downloadHandler.text;
                 ResponseData responseData = JsonUtility.FromJson<ResponseData>(response);
 
-                animationEvent = responseData.animation;
+                animationEvent = responseData.body_movement;
+                audioLink = responseData.voice_link;
+                text = responseData.text_message;
+                faceExpression = responseData.face_expression;
                 validResponse = true;
             }
         }
     }
+
+
 
 }
