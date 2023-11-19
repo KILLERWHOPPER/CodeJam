@@ -7,10 +7,10 @@ import json
 import fakeyou
 
 app = FastAPI()
-client = OpenAI(api_key="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")
+client = OpenAI(api_key="get your own key")
 fakeyou_url = 'https://api.fakeyou.com/tts/inference'
 fy = fakeyou.FakeYou()
-fy.login("killerwhopper", "Whop1029946339")
+fy.login("get your", "own account")
 class CharacterInfo(BaseModel):
     char_name: str
     series: str
