@@ -17,6 +17,7 @@ public class Microphone : MonoBehaviour
 
     public Button button;
     public TextMeshProUGUI buttonText;
+    public TextMeshProUGUI tmptext;
     string outputText;
 
     private void Awake()
@@ -73,6 +74,7 @@ public class Microphone : MonoBehaviour
         var text = res.Result;
 
         outputText = text;
+        tmptext.text = text;
         openAI.GenerateResponse(outputText);
     }
 

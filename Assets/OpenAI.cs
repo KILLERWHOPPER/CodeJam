@@ -10,7 +10,7 @@ public class OpenAI : MonoBehaviour
 {
     class RequestMicrophoneData
     {
-        public string dialogue;
+        public string text_message;
     }
 
     class RequestChar
@@ -32,11 +32,11 @@ public class OpenAI : MonoBehaviour
         public string error;
     }
 
-    string Base = "http://192.168.59.105:8000";
+    string Base = "http://127.0.0.1:8000";
 
     public static bool validResponse = false;
-    public static string animationEvent = "";
-    public static string audioLink = "";
+    public static string animationEvent;
+    public static string audioLink;
     public static string text = "";
     public static string faceExpression = "";
 
@@ -72,7 +72,7 @@ public class OpenAI : MonoBehaviour
     {
         string url = Base + "/receive_input/";
         RequestMicrophoneData data = new RequestMicrophoneData();
-        data.dialogue = prompt;
+        data.text_message = prompt;
 
         string jsonData = JsonUtility.ToJson(data);
         byte[] byteData = System.Text.Encoding.UTF8.GetBytes(jsonData);
@@ -113,8 +113,8 @@ public class OpenAI : MonoBehaviour
                 ResponseData responseData = JsonUtility.FromJson<ResponseData>(response);
 
                 animationEvent = responseData.body_movement;
-                audioLink = responseData.voice_link;
                 text = responseData.text_message;
+                audioLink = responseData.voice_link;
                 faceExpression = responseData.face_expression;
                 validResponse = true;
             }

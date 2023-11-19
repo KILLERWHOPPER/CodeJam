@@ -440,7 +440,6 @@ GameObject:
   - component: {fileID: 7072478885652658473}
   - component: {fileID: 7466891814929943397}
   - component: {fileID: 8214493242259514821}
-  - component: {fileID: 5168667478871336968}
   - component: {fileID: 8506908699012641893}
   m_Layer: 0
   m_Name: LeftHand
@@ -508,30 +507,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7072478885645355679}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47bfa9ae8d9923d468ee24c355124f00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   PokeAttachPoint: {fileID: 7072478885644867269}
---- !u!114 &5168667478871336968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7072478885645355679}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0603eb5b5eba31641b0298d1a7b28006, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gripInputActionReference: {fileID: 6558622148059887818, guid: c348712bda248c246b8c49b3db54643f, type: 3}
-  openAI: {fileID: 0}
-  whisper: {fileID: 0}
-  microphoneRecord: {fileID: 0}
-  button: {fileID: 0}
-  buttonText: {fileID: 0}
 --- !u!114 &8506908699012641893
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,7 +520,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7072478885645355679}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bc03a4c19604ea394e364f8fc632928, type: 3}
   m_Name: 

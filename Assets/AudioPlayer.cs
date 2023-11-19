@@ -1,37 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class TextToSpeech : MonoBehaviour
+public class AudioPlayer : MonoBehaviour
 {
-    [SerializeField] private AudioSource audioSource;
+    public AudioSource audioSource;
 
     private void Update()
     {
-        if(OpenAI.validResponse)
+        if(OpenAI.validResponse && OpenAI.audioLink != "")
         {
-            StartCoroutine(DownloadAndPlayAudio(OpenAI.audioLink));
+            DownloadAndPlayAudio(OpenAI.audioLink);
+            OpenAI.validResponse = false;
         }
     }
 
-    IEnumerator DownloadAndPlayAudio(string url)
+    private async Task DownloadAndPlayAudio(string url)
     {
-        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.MPEG))
+        using (UnityWebRequest www = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.WAV))
         {
-            yield return www.SendWebRequest();
+            var operation = www.SendWebRequest();
 
-            if (www.result == UnityWebRequest.Result.Success)
+            while (!operation.isDone)
             {
-                AudioClip audioClip = DownloadHandlerAudioClip.GetContent(www);
+                await Task.Delay(100); // Wait for a short period before checking again
+            }
 
-                audioSource.clip = audioClip;
-
-                audioSource.Play();
+            if (www.result == UnityWebRequest.Result.ConnectionError || www.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError(www.error);
             }
             else
             {
-                Debug.LogError("Failed to download audio file. Error: " + www.error);
+                AudioClip clip = DownloadHandlerAudioClip.GetContent(www);
+                audioSource.clip = clip;
+                audioSource.Play();
             }
         }
     }
